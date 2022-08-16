@@ -46,7 +46,7 @@ export default {
 					Our Products 🛒
 				</h1>
 
-				<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 2xl:grid-col-5 lg:gap-6 mt-6 px-3">
+				<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 2xl:grid-col-5 lg:gap-6 mt-6 px-5">
 					{this.products.map((product) => {
 						return (
 							<div class="flex flex-col bg-slate-50 gap-2 shadow-md border border-gray-100 rounded-md pb-4 hover:scale-95 transition-all ease-in-out duration-150">

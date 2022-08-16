@@ -41,7 +41,11 @@
 							</td>
 							<td class="">
 								<div class="flex items-center justify-center">
-									₦{{ product.price }}
+									₦{{
+										(product.price * (rate || 1))
+											.toFixed(2)
+											.replace(/\d(?=(\d{3})+\.)/g, "$&,")
+									}}
 								</div>
 							</td>
 
@@ -59,7 +63,15 @@
 							</td>
 							<td class="">
 								<div class="flex items-center justify-center">
-									₦{{ product.price * product.quantity }}
+									₦{{
+										(
+											product.price *
+											product.quantity *
+											(rate || 1)
+										)
+											.toFixed(2)
+											.replace(/\d(?=(\d{3})+\.)/g, "$&,")
+									}}
 								</div>
 							</td>
 							<td class="">
@@ -78,34 +90,45 @@
 				</table>
 			</div>
 			<div v-if="!products.length">
-				<p class="bg-washed-red pv3 ph2 br2">No item in your cart!</p>
+				<p class="">No item in your cart!</p>
 			</div>
 			<div class="tl mw8 center w-100">
-				<div v-if="products.length > 0" class="">
-					<p class="f4">
-						<span class="green fw6 mr2">Total:</span>₦{{
-							total.toFixed(2)
+				<div
+					v-if="products.length > 0"
+					class="mb-2 flex flex-col items-center justify-center"
+				>
+					<p class="font-bold text-lg text-black">
+						<span class="text-blue-500 text-sm font-[500]"
+							>Total: </span
+						>₦{{
+							(total.toFixed(2) * (rate || 1))
+								.toFixed(2)
+								.replace(/\d(?=(\d{3})+\.)/g, "$&,")
 						}}
 					</p>
 					<button
-						class="bg-washed-red bn br2 pv2 ph3 w-100 w5-ns red di-ns db mr3 link"
+						class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
 						@click="removeCartProducts()"
 					>
-						<i class="fas fa-trash"></i> Checkout ({{ cartNumber }})
+						🛒 Checkout ({{ cartNumber }})
 					</button>
 				</div>
 				<router-link
 					to="/"
-					class="link bg-green mt3 pv2 ph3 bn br2 white tc db dib-ns"
-					><i class="fas fa-space-shuttle mr2"></i>Continue
-					Shopping</router-link
+					class="text-blue-500 text-sm font-[500] flex items-center justify-center"
+					><i class=""></i>Continue Shopping</router-link
 				>
+			</div>
+			<div class="mt-2">
+				<MapComponent />
 			</div>
 		</div>
 	</div>
 </template>
 <script>
 import router from "@/router";
+import axios from "axios";
+import MapComponent from "@/components/MapComponent.vue";
 
 export default {
 	name: "cartView",
@@ -119,6 +142,9 @@ export default {
 		cartNumber() {
 			return this.$store.getters.cartIteming;
 		},
+		newRate() {
+			return this.rate;
+		},
 	},
 	methods: {
 		removeProduct(product) {
@@ -127,6 +153,23 @@ export default {
 		removeCartProducts() {
 			this.$store.dispatch("removeCartProducts").then(router.push("/"));
 		},
+		async fetchRate() {
+			const response = await axios.get(
+				"https://api.exchangerate.host/convert?from=USD&to=NGN"
+			);
+			const result = response.data.result;
+			this.rate = result;
+			return this.rate;
+		},
 	},
+	data() {
+		return {
+			rate: null,
+		};
+	},
+	async mounted() {
+		await this.fetchRate();
+	},
+	components: { MapComponent },
 };
 </script>

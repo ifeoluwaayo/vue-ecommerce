@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="flex items-center justify center w-full flex-col">
+		<div class="flex items-center justify center w-full flex-col p-3">
 			<h1 class="text-gray-800 font-[500] text-3xl mt-4">Your Cart</h1>
 			<div class="overflow-auto">
 				<table class="w-full my-3" cellspacing="0">

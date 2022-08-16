@@ -20,10 +20,10 @@
 						{{ product.name }}
 					</h3>
 					<div class="flex gap-2 items-center justify-center">
-						<p class="text-gray-500 font-[400] text-sm">
+						<p class="text-gray-500 font-[400] text-xs md:text-sm">
 							1 in {{ product.quantity }} for:
 						</p>
-						<p class="text-gray-900 font-[500] text-lg">
+						<p class="text-gray-900 font-[500] md:text-lg text-sm">
 							₦
 							{{
 								(product.price * (rate || 1))
